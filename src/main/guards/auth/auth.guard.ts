@@ -6,13 +6,12 @@ export class AuthGuard implements CanActivate {
   canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
-    const guard_validate = context.switchToHttp().getRequest() as Request
+    const guard_validate = context.switchToHttp().getRequest() as Request;
 
-    console.log("request url ",guard_validate.url)
+    console.log('request url ', guard_validate.url);
 
-    if (guard_validate.url === '/name_user') return false;
+    if (!guard_validate.headers['authorization']) return false;
 
     return true;
   }
-
 }

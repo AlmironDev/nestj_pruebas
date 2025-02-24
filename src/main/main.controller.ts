@@ -17,6 +17,7 @@ export class MainController {
         return "Error con stados 200"
     }
     @Get('ticket/:num')
+    @UseGuards(AuthGuard)
     getNumber(@Param('num',ParseIntPipe) num:number){
         return num + 1000
     }

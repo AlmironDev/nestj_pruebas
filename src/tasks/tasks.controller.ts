@@ -2,23 +2,26 @@ import { Body, Controller, Delete, Get, Param, Patch, Post, Put, Query, UsePipes
 import { TasksService } from './tasks.service';
 import { CreateTaskDto,  UpdateTaskDto } from './dto/taks.dto';
 import { ValidationTypes } from 'class-validator';
+import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 
 @Controller('tasks')
 export class TasksController {
   constructor(private readonly tasksService: TasksService) {}
 
   @Get()
-  getAllTasks(@Query() query: object) {
-    console.log('query', query);
+  @ApiResponse({status:200, description:'All tasks'})
+  getAllTasks() {
+    console.log('queryentramos');
     return this.tasksService.getTasks();
   }
   @Get('/:id')
-  getTask(@Param('id') id: number) {
-    console.log('id', id);
+  getTask(@Param('id') id: string) {
+
     return this.tasksService.getTask(id);
   }
 
   @Post()
+  @ApiOperation({summary:'Create a task'})
   createTasks(@Body() task: CreateTaskDto) {
     console.log('task0', task);
     return this.tasksService.createTasks(task);

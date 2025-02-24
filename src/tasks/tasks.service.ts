@@ -1,9 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import {  CreateTaskDto, UpdateTaskDto } from './dto/taks.dto';
-
-export interface User {
-  id: string;
-}
+import { PrismaService } from 'src/prisma.service';
 
 export interface Task {
   id: number;
@@ -11,26 +8,20 @@ export interface Task {
 
 @Injectable()
 export class TasksService {
-  private tasks: Task[] = [];
+  constructor(private prisma:PrismaService) {}
 
   getTasks() {
-    return this.tasks;
+    return this.prisma.tasks.findMany();
   }
 
-  getTask(id: number) {
-    console.log('task', this.tasks);
-    console.log('id_service', id);
-    console.log('Tipo de id_service:', typeof id, id);
+  getTask(id: string) {
 
-    return this.tasks.find((task) => task.id === id);
+    return this.prisma.tasks.findUnique({ where: { id } });
   }
 
-  createTasks(task: CreateTaskDto) {
-    this.tasks.push({
-      ...task,
-      id: this.tasks.length + 1,
-    });
-    return task;
+  createTasks(task: any) {
+  
+    return this.prisma.tasks.create({ data: task });
   }
 
   updateTasks(task: UpdateTaskDto) {
